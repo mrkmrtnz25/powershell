@@ -83,3 +83,111 @@ grant-smbshareaccess -name ____ <-name of file  -Accountname _____ <-name of acc
 ```
 Get-smbshare access -name ____ <- name of the file
 ```
+### To check if dhcp is installed
+```
+get-windows feature dhcp
+```
+### To install dhcp in window server
+```
+install-windowsfeature dhcp -includeallsubfeature -includemanagementtool
+```
+### To add dns in dhcp server
+```
+add-dhcpserverindc -dnsname ____ -ipaddress _____
+```
+### To show the dhcp in dc
+```
+get-dhcpserverindc
+```
+### To add dhcp in adds
+```
+add-dhcpserver4scope -name "name of the server" -startrange _____ -endrange______ -subnetmask______ -stateactive
+```
+### To exclude ip address
+```
+add-dhcpserver4exclusionrange -scopeid ______ -startrange _____ -endrange______
+```
+```
+set-dhcpserveroptionvalue -optionid 3 -value ___ -scopeid ____
+```
+```
+set-dhcp4optionvalue -dnsdomain _____ -dnsserver______
+```
+### To Install WDS
+```
+Install-WindowsFeature wds-deployment -includemanagementtools -includemanagementtools
+```
+### 1-initilze PXE boot so can push deployment over the network
+```
+$wdsUtilResults = wdsutil /initialize-server /remInst:"C:\RemoteInstall"
+$wdsUtilResults | select -last 1
+```
+### 2-bootloader to start over the network
+```
+Import-WdsBootImage -Path "D:\sources\boot.wim" -newimagename "Win10"
+```
+### 3-mandatory when No mapping is appear
+```
+Get-Service -Name RpcSs | Start-Service
+```
+```
+Get-Service -Name RpcLocator | Start-Service
+```
+```
+Restart-Service WDSServer
+```
+###  create a new Group called WIn 10
+```
+New-WdsInstallImageGroup -Name "Win10"
+```
+### name of the ISO we have into the BOOT
+```
+Get-WindowsImage -imagePath "D:\sources\install.wim" | select Imagename
+```
+### pipline the Image so when we import the new image it will refere to the 
+```
+$imagename
+```
+```
+$imageName = 'Windows 10 Pro'
+```
+```
+Import-WdsInstallImage -ImageGroup "Win10" -Path "D:\sources\install.wim" -ImageName $imageName
+```
+### Installing HyperV powershell
+```
+Install-Windowsfeature hyper-v -includeAllsubFeature -IncludemanagementTools
+```
+### show commands
+```
+get-vm
+```
+### DISKPART AND MAKE RAID
+```
+get-disk
+initialize-disk -number ___ <-number of disk -partitionstyle ___ <-MBR/GPT/Dynmic
+```
+### diskpart
+### Raid 1 mirroring
+```
+create volume mirror disk=1,2
+```
+### Raid0 stripe
+```
+create volume stripe n=___ <- is the number of MB disk=3,4
+```
+### Raid5 
+```
+create volume raid disk=5,6,7
+```
+### how to format volume
+```
+select volume
+```
+```
+format fs=ntfs label=___ <-whatever you want
+```
+```
+assign  letter __ <-letter you want
+```   
+
