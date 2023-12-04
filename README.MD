@@ -1,4 +1,4 @@
-# Useful powershell commands for ADDS
+# Useful powershell commands
 
 ### Commands to install ADDS and ADDS forrest with DNS
 ```
